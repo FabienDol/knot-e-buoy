@@ -2,29 +2,32 @@
 private class BookingsTriggerHandlerTest {
 
   @TestSetup
-  static void makeData(){
-    
-  }
-
-  @IsTest
-  static void testUpdateBoatStatus_EndsInPast() {
-    // GIVEN
+  private static void makeData(){
     Account acc = new Account();
-    acc.Name = 'ACC TEST';
+    acc.Name = 'ACC NAME';
     insert acc;
     Contact con = new Contact();
     con.AccountId = acc.Id;
-    con.LastName = 'ACC NAME';
+    con.LastName = 'CON NAME';
     insert con;
     Boat__c boat = new Boat__c();
     boat.Name = 'TEST BOAT';
     boat.Contact__c = con.Id;
     insert boat;
+  }
+
+  @IsTest
+  static void testUpdateBoatStatus_EndsInPast() {
+    // GIVEN
+    Boat__c boat = [SELECT Id FROM Boat__c WHERE Name = 'TEST BOAT' LIMIT 1];
+    Contact con = [SELECT Id FROM Contact WHERE LastName = 'CON NAME' LIMIT 1];
+    Account acc = [SELECT Id FROM Account WHERE Name = 'ACC NAME' LIMIT 1];
+
     Booking__c book = new Booking__c();
-    book.Account__c = acc.Id;
     book.Customer_Contact__c = con.Id;
-    book.Start_Date__c = Date.today().addDays(-1);
-    book.End_Date__c = Date.today().addDays(5);
+    book.Account__c = acc.Id;
+    book.Start_Date__c = Date.today().addDays(-5);
+    book.End_Date__c = Date.today().addDays(-1);
     book.Status__c = 'Option';
     book.Boat__c = boat.Id;
     insert book;
@@ -54,17 +57,10 @@ private class BookingsTriggerHandlerTest {
   @IsTest
   static void testUpdateBoatStatus_StartsIn10Days() {
     // GIVEN
-    Account acc = new Account();
-    acc.Name = 'ACC TEST';
-    insert acc;
-    Contact con = new Contact();
-    con.AccountId = acc.Id;
-    con.LastName = 'ACC NAME';
-    insert con;
-    Boat__c boat = new Boat__c();
-    boat.Name = 'TEST BOAT';
-    boat.Contact__c = con.Id;
-    insert boat;
+    Boat__c boat = [SELECT Id FROM Boat__c WHERE Name = 'TEST BOAT' LIMIT 1];
+    Contact con = [SELECT Id FROM Contact WHERE LastName = 'CON NAME' LIMIT 1];
+    Account acc = [SELECT Id FROM Account WHERE Name = 'ACC NAME' LIMIT 1];
+
     Booking__c book = new Booking__c();
     book.Account__c = acc.Id;
     book.Customer_Contact__c = con.Id;
@@ -99,17 +95,10 @@ private class BookingsTriggerHandlerTest {
   @IsTest
   static void testUpdateBoatStatus_StartsTomorrow() {
     // GIVEN
-    Account acc = new Account();
-    acc.Name = 'ACC TEST';
-    insert acc;
-    Contact con = new Contact();
-    con.AccountId = acc.Id;
-    con.LastName = 'ACC NAME';
-    insert con;
-    Boat__c boat = new Boat__c();
-    boat.Name = 'TEST BOAT';
-    boat.Contact__c = con.Id;
-    insert boat;
+    Boat__c boat = [SELECT Id FROM Boat__c WHERE Name = 'TEST BOAT' LIMIT 1];
+    Contact con = [SELECT Id FROM Contact WHERE LastName = 'CON NAME' LIMIT 1];
+    Account acc = [SELECT Id FROM Account WHERE Name = 'ACC NAME' LIMIT 1];
+    
     Booking__c book = new Booking__c();
     book.Account__c = acc.Id;
     book.Customer_Contact__c = con.Id;
